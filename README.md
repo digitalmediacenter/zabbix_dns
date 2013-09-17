@@ -4,6 +4,9 @@
 
 "DNS Monitoring helper for [Zabbix][1]"
 
+This tool sends a dns request to a defined server and report the time needed for the request or a zabbix status value regarding
+the success of the dns request (also a empty answer is reported as successful).
+
 This project is a fork of https://bitbucket.org/aheil/zabbix-dns
 
 ## Compile and Install
@@ -26,6 +29,32 @@ On Ubuntu simply do:
         make install
 
 This will install the binary `zabbix_dns` to `/etc/zabbix/externalscripts`.
+
+### Usage
+
+        $ ./zabbix_dns --help
+        zabbix_dns v1.2 (Tue Sep 17 16:21:13 CEST 2013)
+        Copyright (c) 2012, Andreas Heil <ah@linux-hq.de>
+        Copyright (c) 2013, Marc Schoechlin <ms@256bit.org>
+        Usage: ./zabbix_dns [OPTIONS] <SERVER> <DOMAIN>
+        Options:
+          -h, --help       Display this help and exit.
+          -p, --port=#     Port number to use (default: 53).
+          -r, --recurse    Enable recursion (default: off).
+          -s, --speed      Measure speed (default: off).
+          -t, --type=VALUE Request Type (default: soa).
+                           Possible values: a, soa
+              --version    Display version information and exit.
+        Arguments:
+          SERVER           IPv4 address of the server (x.x.x.x).
+          DOMAIN           request DOMAIN (e.g.: linux-hq.de).
+
+### TODOs
+
+ * check argv[1] for valid IPv4 address
+ * implement IPv6
+ * remove dependency to libldns
+ * a error should be reportable if dns result is empty
 
 ## Authors
 

@@ -134,6 +134,7 @@ int main(int argc, char **argv) {
             puts("0");
         }
         err(EXIT_FAILURE, NULL);
+        exit(EXIT_FAILURE);
     }
 
     /* set options */
@@ -158,7 +159,8 @@ int main(int argc, char **argv) {
         }else{
             puts("0");
         }
-        err(EXIT_FAILURE, "%u", __LINE__);
+        errx(EXIT_FAILURE, "malformed request to server %s",server);
+        exit(EXIT_FAILURE);
     }
 
 
@@ -172,6 +174,7 @@ int main(int argc, char **argv) {
             puts("0");
         }
         err(EXIT_FAILURE, "%s", ldns_get_errorstr_by_id(status));
+        exit(EXIT_FAILURE);
     }
     ldns_rdf_deep_free(rdf);
 
@@ -184,7 +187,8 @@ int main(int argc, char **argv) {
         }else{
             puts("0");
         }
-        err(EXIT_FAILURE, "%u", __LINE__);
+        err(EXIT_FAILURE, "line %u", __LINE__);
+        exit(EXIT_FAILURE);
     }
     ldns_dname2canonical(rdf);
 
@@ -200,24 +204,24 @@ int main(int argc, char **argv) {
             puts("0");
         }
         errx(EXIT_FAILURE, "No response from %s", server);
+        exit(EXIT_FAILURE);
     }
     /* get the SOA records from the answer section */
     rrlist = ldns_pkt_rr_list_by_type(pkt, type, LDNS_SECTION_ANSWER);
 
     if(!rrlist) {
         if (speed){
-            puts("0.0");
+            gettimeofday(&tvEnd, NULL);
+            timeval_subtract(&tvDiff, &tvEnd, &tvBegin);
+            printf("%ld.%06ld", tvDiff.tv_sec, tvDiff.tv_usec);
         }else{
             puts("1");
         }
-        exit(EXIT_FAILURE);
     }
     else {
         ldns_rr_list_deep_free(rrlist);
         if (speed){
-               gettimeofday(&tvEnd, NULL);
-               timeval_subtract(&tvDiff, &tvEnd, &tvBegin);
-               printf("%ld.%06ld", tvDiff.tv_sec, tvDiff.tv_usec);
+               puts("0.0");
         }else{
                puts("0");
         }
